@@ -2,20 +2,19 @@ import logo from './logo.svg';
 import './App.css';
 import { useEffect, useState } from 'react';
 import SearchBar from './components/SearchBar';
-import { getApiData } from './api/getData';
+import { getApiData } from './helpers/getData';
 
 function App() {
 
    const [info,setInfo] = useState()
-   const [result,setResult] = useState([])
+  
 
   useEffect(()=>{
-    fetch("https://flights-api-production.up.railway.app/api/flights")
-    .then(res=>res.json())
-    .then(data =>{
-    console.log(data)
-   setInfo(data)
-    })
+    const data = async () => {
+      const info = await getApiData()
+      setInfo(info)
+    }
+    data()
     .catch((err) => {
       console.log(err.message);
    });
@@ -23,6 +22,7 @@ function App() {
 
    
 
+  
  
   return (
     <div className="App">

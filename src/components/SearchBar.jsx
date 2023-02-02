@@ -1,9 +1,13 @@
 
 import { useEffect, useState } from "react"
+import {searchFligths } from "../helpers/getData"
 
 export default function SearchBar({info}){
 
     const [search,setSearch] = useState([])
+    const [data,setData] = useState([])
+  
+   
 
 const [input,setInput] = useState({
     cityFrom:"",
@@ -12,7 +16,6 @@ const [input,setInput] = useState({
   passengers:""
 })
   
- 
 
 
  function handleInputChange (e) {
@@ -21,16 +24,19 @@ const [input,setInput] = useState({
         [e.target.name]:e.target.value
        })  
  }
-
+/* 
  const allValuesFilled = Object.values(input).every(value => value !== '')
- 
+  */
+
+ useEffect(() => {
+  setSearch(info)
+}, [info])
 
 
   function handleSearch(){
-  if(info.length===0){
-    alert("no existen vuelos disponibles")
-  }else{
-    const datafilt = info.filter(el =>{
+  
+  
+   /*  const datafilt = info.filter(el =>{
         return(
         el.cityFrom.toLowerCase().includes(input.cityFrom.toLowerCase()) && el.cityTo.toLowerCase().includes(input.cityTo.toLowerCase()) && el.date.includes( input.date )&& el.availableSeats > input.passengers
         )
@@ -38,13 +44,21 @@ const [input,setInput] = useState({
     }
     )
      datafilt.length?setSearch(datafilt):setSearch({message:"no se encuentran vuelos disponibles"})
-   
-    
+    */
+     const result =  searchFligths(info, input)
+     setSearch(result)
+    setInput({
+      cityFrom:"",
+      cityTo:"",
+     date:"",
+     passengers:""
+    })
   }
  
- 
-  }
- 
+   if(!search){
+
+   return(<h1>Cargando...</h1>)
+   }
 
     return (
         <div>
@@ -76,15 +90,17 @@ const [input,setInput] = useState({
             name = "passengers"
             value = {input.passengers}
             />
-            <button disabled={!allValuesFilled}  onClick ={handleSearch} >Search</button>
+            <button /* disabled={!allValuesFilled} */  onClick ={handleSearch} >Search</button>
             <div>
             {
-               search.length? search.map(el=>{
+            Array.isArray(search)? search
+               .map(el=>{
                 return(
                     <div key ={el.id}>
                     <ol>
                     <li>From:{el.cityFrom}</li>
-                    <li>To:{el.cityTo}</li>                
+                    <li>To:{el.cityTo}</li>
+                    <li>Price:{el.price}</li>               
                     <li>Seats:{el.availableSeats}</li>
                     <li>Date:{el.date}</li>                
                 </ol>
@@ -97,7 +113,6 @@ const [input,setInput] = useState({
             
                }
             </div>
-            
         </div>
     )
-}
+            }
