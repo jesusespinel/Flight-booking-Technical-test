@@ -2,11 +2,12 @@ import logo from './logo.svg';
 import './App.css';
 import { useEffect, useState } from 'react';
 import SearchBar from './components/SearchBar';
-import { getApiData } from './helpers/getData';
+import { getApiData} from './helpers/getData';
 
 function App() {
 
    const [info,setInfo] = useState()
+   
   
 
   useEffect(()=>{
@@ -18,7 +19,11 @@ function App() {
     .catch((err) => {
       console.log(err.message);
    });
+
   },[]) 
+
+  
+
 
    
 
@@ -27,8 +32,7 @@ function App() {
   return (
     <div className="App">
       <h1>Indatum Booking Fligths App</h1>
-      <SearchBar info={info}
-        />
+      <SearchBar info={info}  />
 
       
     </div>

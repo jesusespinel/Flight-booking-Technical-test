@@ -38,4 +38,14 @@ const orderByHour =(info,order)=>{
  return sort
 }
 
-export {getApiData, searchFligths,sortPricesFligths,searchByPrice,orderByHour}
+const getApiDetail = async(id)=>{
+
+    const url = `https://flights-api-production.up.railway.app/api/flights/${id}`
+    const data =  await fetch(url)
+    .then (res =>res.json())
+    .then(data =>data)
+    
+    return data
+}
+
+export {getApiData, searchFligths,sortPricesFligths,searchByPrice,orderByHour,getApiDetail}
