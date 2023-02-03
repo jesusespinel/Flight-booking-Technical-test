@@ -1,12 +1,21 @@
 
 import { useEffect, useState } from "react"
-import {searchFligths } from "../helpers/getData"
+import {searchFligths,searchByPrice,orderByHour} from "../helpers/getData"
 
 export default function SearchBar({info}){
 
     const [search,setSearch] = useState([])
+
     const [data,setData] = useState([])
-  
+
+    const  [hour,setHour] = useState("")
+    
+    
+
+    const  [prices,setPrices] = useState({
+      minPrice:0,
+      maxPrice:0
+    })
    
 
 const [input,setInput] = useState({
@@ -18,35 +27,39 @@ const [input,setInput] = useState({
   
 
 
+
+
  function handleInputChange (e) {
     setInput({
         ...input,
         [e.target.name]:e.target.value
        })  
  }
-/* 
- const allValuesFilled = Object.values(input).every(value => value !== '')
-  */
 
  useEffect(() => {
   setSearch(info)
+  setData(info)
 }, [info])
 
 
-  function handleSearch(){
+const handlePricesChange = (e) => {
+  setPrices({
+    ...prices,
+    [e.target.name]: e.target.value
+  })
+}
+
+const handlePriceSearch=()=>{
+  const resultPrices = searchByPrice(data,prices)
+  console.log(resultPrices)
+  setSearch(resultPrices)
+}
+
+  function handleSearch(e){
   
-  
-   /*  const datafilt = info.filter(el =>{
-        return(
-        el.cityFrom.toLowerCase().includes(input.cityFrom.toLowerCase()) && el.cityTo.toLowerCase().includes(input.cityTo.toLowerCase()) && el.date.includes( input.date )&& el.availableSeats > input.passengers
-        )
-        
-    }
-    )
-     datafilt.length?setSearch(datafilt):setSearch({message:"no se encuentran vuelos disponibles"})
-    */
      const result =  searchFligths(info, input)
      setSearch(result)
+     setData(result)
     setInput({
       cityFrom:"",
       cityTo:"",
@@ -54,6 +67,26 @@ const [input,setInput] = useState({
      passengers:""
     })
   }
+   
+  const handleSelectHour=(e)=>{
+    if(e.target.value !== "all"){
+      setHour(e.target.value) 
+  const sortHour = orderByHour(data,hour)
+  console.log(sortHour)
+  
+  setSearch(sortHour)
+  
+  }
+
+
+    }
+
+  
+  /* const handleOrderHour = () => {
+    console.log(data)
+   
+  } */
+
  
    if(!search){
 
@@ -61,7 +94,11 @@ const [input,setInput] = useState({
    }
 
     return (
+
+      
         <div>
+                
+
             <input
             type="text"
             placeholder="Origin"
@@ -113,6 +150,33 @@ const [input,setInput] = useState({
             
                }
             </div>
+            <div>
+
+          <label>Filter price by:</label>
+          <input
+           type = "number"
+           placeholder="Min Price"
+           name = "minPrice"
+           value = {prices.minPrice}
+           onChange={handlePricesChange}
+          />
+         <input 
+         type = "number"
+         placeholder="Max Price"
+         name = "maxPrice"
+         value = {prices.maxPrice}        
+         onChange={handlePricesChange}
+         />
+         <button onClick={handlePriceSearch}>Filter</button>
+        </div>
+            <label>Order by hour</label>
+            <select onChange={handleSelectHour}>
+              <option value ="all">Select your hour</option>
+              <option value ="asc">Asc Hour </option>
+              <option value ="desc"> Desc Hour</option>
+            </select>
+
+     {/*   <button onClick={handleOrderHour}>Ordening by hour</button> */}
         </div>
     )
-            }
+              }

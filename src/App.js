@@ -26,7 +26,7 @@ function App() {
  
   return (
     <div className="App">
-      <h1>Hola mundo</h1>
+      <h1>Indatum Booking Fligths App</h1>
       <SearchBar info={info}
         />
 

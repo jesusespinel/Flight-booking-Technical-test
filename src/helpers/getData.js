@@ -21,4 +21,21 @@ const sortPricesFligths = (info) =>{
     return sortPrices
 
 }
-export {getApiData, searchFligths,sortPricesFligths}
+
+
+const searchByPrice =(info,prices)=>{
+
+    const result = info.filter( el=>el.price >= prices.minPrice && el.price <= prices.maxPrice )
+    console.log(result)
+    return result.length? result:{message: "No hay vuelos disponibles con ese precio"}
+}
+
+const orderByHour =(info,order)=>{
+ const sort =  order === "asc" ? info.sort((a,b)=> Date.parse(a.date) - Date.parse(b.date)):
+ info.sort((a,b)=> Date.parse(b.date) - Date.parse(a.date))
+ console.log(sort)
+ 
+ return sort
+}
+
+export {getApiData, searchFligths,sortPricesFligths,searchByPrice,orderByHour}
