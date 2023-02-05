@@ -48,4 +48,22 @@ const getApiDetail = async(id)=>{
     return data
 }
 
-export {getApiData, searchFligths,sortPricesFligths,searchByPrice,orderByHour,getApiDetail}
+
+const API_KEY= "0386930f5763e2b711a8a4f5"
+const getApiExchangeRate = async()=>{
+    const url =`https://v6.exchangerate-api.com/v6/${API_KEY}/latest/USD`
+   const data = await fetch(url)
+   .then (res =>res.json())
+   .then(data=>data)
+   return data
+}
+
+const calculatedMiles=(info,exChangeRate,selectCurrency,id)=>{
+    const fligth= info?.find(el=>el._id === id)
+    const miles = (selectCurrency === "COP"? fligth?.price * exChangeRate : fligth?.price)
+    console.log(miles)
+    return Math.round(miles/1.67)
+}
+
+calculatedMiles()
+export {getApiData, searchFligths,sortPricesFligths,searchByPrice,orderByHour,getApiDetail,getApiExchangeRate,calculatedMiles}

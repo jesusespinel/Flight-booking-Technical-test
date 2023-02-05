@@ -1,8 +1,11 @@
 
 import { useEffect, useState } from "react"
-import { searchFligths, searchByPrice, orderByHour ,getApiDetail} from "../helpers/getData"
+import { searchFligths, searchByPrice, orderByHour ,getApiDetail,getApiExchangeRate,calculatedMiles} from "../helpers/getData"
 
 export default function SearchBar({ info}) {
+
+ 
+
   const [search, setSearch] = useState([])
   const [data, setData] = useState([])
   const [hour, setHour] = useState("")
@@ -23,6 +26,24 @@ export default function SearchBar({ info}) {
     passengers: ""
   })
 //-------------------------------------------------------
+
+const [exChangeRate,setExchangeRate] = useState(0)
+const [selectCurrency,setSelectCurrency] = useState("COP")
+const [indatumMiles,setIndatumMiles] = useState(0)
+
+
+
+
+//-------------------------------------------------------
+
+useEffect(()=>{
+  const rates = async() =>{
+  const info = await getApiExchangeRate()
+  setExchangeRate(info.conversion_rates.COP)
+  }
+  rates()
+},[])
+
   function handleInputChange(e) {
     setInput({
       ...input,
@@ -45,7 +66,6 @@ export default function SearchBar({ info}) {
 
   const handlePriceSearch = () => {
     const resultPrices = searchByPrice(data, prices)
-    console.log(resultPrices)
     setSearch(resultPrices)
   }
 
@@ -66,8 +86,6 @@ export default function SearchBar({ info}) {
     if (e.target.value !== "all") {
       setHour(e.target.value)
       const sortHour = orderByHour(data, hour)
-      console.log(sortHour)
-
       setSearch(sortHour)
 
     }
@@ -76,19 +94,30 @@ export default function SearchBar({ info}) {
   const changeIdFligth=(e) =>{
     const dataDetail = async () => {
       const infoDetails= await getApiDetail(e.target.value)
-      setDetail(infoDetails)
+       setDetail(infoDetails)
+      const IndatumGainedMiles =  calculatedMiles(info,exChangeRate,selectCurrency,e.target.value)
+        setIndatumMiles(IndatumGainedMiles)  
     }
     dataDetail()
     .catch((err) => {
-      console.log(err.message);
+      console.log(err);
    });
       setShowModal(true)
   }
+  
 
   const handleCloseModal= (e) =>{
     setShowModal(false)
 
   }
+  const handleSelectCurrency=(e)=>{
+      setSelectCurrency(e.target.value)
+
+  }
+
+  
+
+
 
   if (!search) {
 
@@ -161,11 +190,20 @@ export default function SearchBar({ info}) {
                         <li>Price:{detail.price}</li>
                         <li>Seats:{detail.availableSeats}</li>
                         <li>Date:{detail.date}</li>
-                        <button onClick={handleCloseModal}>Close</button>
+                        <label>Please select the currency for your purchase:</label>
+                        <select onChange={handleSelectCurrency}>   
+                        <option value="COP">COP</option>          
+                        <option value="USD">USD</option>
+                         </select>
+                          <li><p>Congratulations!,You have won {indatumMiles} for the purchasing of you fligth!!</p></li>
+                            <button> Confirm Purchase</button>
+                          <button onClick={handleCloseModal}>Cancel Purchase</button>                                        
                       </ul>
+                   
                       
                     )
                   }
+                
       </div>
       <div>
         <label>Filter price by:</label>
