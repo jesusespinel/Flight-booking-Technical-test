@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
-import { searchFligths, searchByPrice, orderByHour ,getApiDetail,getApiExchangeRate,calculatedMiles} from "../helpers/getData"
-
+import { searchFligths, searchByPrice, orderByHour ,getApiDetail,getApiExchangeRate,calculatedMiles,saveLocalStorage} from "../helpers/getData"
+import './style.css'
 export default function SearchBar({ info}) {
 
  
@@ -57,6 +57,7 @@ useEffect(()=>{
   }, [info])
 
 
+
   const handlePricesChange = (e) => {
     setPrices({
       ...prices,
@@ -108,16 +109,28 @@ useEffect(()=>{
 
   const handleCloseModal= (e) =>{
     setShowModal(false)
+  
 
   }
   const handleSelectCurrency=(e)=>{
       setSelectCurrency(e.target.value)
 
   }
-
+  const handleConfirm=(e) =>{
+    const dataDetail = async () => {
+      const infoDetails= await getApiDetail(e.target.value)
+      console.log(e.target.value)
+      const saveStorage = saveLocalStorage(info,e.target.value)
+      alert("Your purchase was successfully completed")
+      setDetail("")
+    }
+    dataDetail()
+    .catch((err) => {
+      console.log(err);
+   });
+  }
+   
   
-
-
 
   if (!search) {
 
@@ -195,8 +208,8 @@ useEffect(()=>{
                         <option value="COP">COP</option>          
                         <option value="USD">USD</option>
                          </select>
-                          <li><p>Congratulations!,You have won {indatumMiles} for the purchasing of you fligth!!</p></li>
-                            <button> Confirm Purchase</button>
+                          <li><p>Congratulations!,You have won <strong>{indatumMiles}</strong> Indatum Milesfor the purchasing of you fligth!!</p></li>
+                            <button value ={detail._id} onClick={handleConfirm}> Confirm Purchase</button>
                           <button onClick={handleCloseModal}>Cancel Purchase</button>                                        
                       </ul>
                    

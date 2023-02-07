@@ -65,5 +65,11 @@ const calculatedMiles=(info,exChangeRate,selectCurrency,id)=>{
     return Math.round(miles/1.67)
 }
 
+const saveLocalStorage=(info,id)=>{
+const detailFligth = info?.find(el=>el._id === id)
+localStorage.setItem("indatum-flights-reservation", JSON.stringify(detailFligth))
+}
+
+
 calculatedMiles()
-export {getApiData, searchFligths,sortPricesFligths,searchByPrice,orderByHour,getApiDetail,getApiExchangeRate,calculatedMiles}
+export {getApiData, searchFligths,sortPricesFligths,searchByPrice,orderByHour,getApiDetail,getApiExchangeRate,calculatedMiles,saveLocalStorage}
