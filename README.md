@@ -1,5 +1,6 @@
 
 Flight Reservation Application with React
+
 This application is designed to allow users to search and book flights using the Indatum Flights API, built using React and JavaScript.
 
 Features
