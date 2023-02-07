@@ -15,16 +15,16 @@ An API for currency conversion
 
 Start the Application
 Clone the repository to the  machine
-
-Copy code
 git clone https://github.com/jesusespinel/flight-reservation-react
 Navigate to the directory
-b
-Copy code
+
 cd flight-reservation-react
 Install the necessary packages
 
 npm install
 Start the application
 npm start
-The application will start running at http://localhost:3000. Once the application is running, enter the desired origin city, destination city, departure date, and number of passengers in the search bar and click the search button. The list of flights matching the criteria will be displayed, allowing for further filtering and ordering options. To purchase a flight, click the purchase button for that flight to view the pop-up window.
+The application will start running at http://localhost:3000. 
+Once the application is running, enter the desired origin city, destination city, departure date, and number of passengers in the search bar and click the search button. 
+The list of flights matching the criteria will be displayed, allowing for further filtering and ordering options.
+To purchase a flight, click the purchase button for that flight to view the pop-up window.
